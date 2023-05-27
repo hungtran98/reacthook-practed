@@ -1,25 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import { Table, Container, Image} from 'react-bootstrap'
 import { fetchAllUser } from '../service/userService'
-import axios from 'axios'
+import ReactPaginate from 'react-paginate'
 
 const TableUser = () => {
 
     const [listUser, setListUser] = useState([])
+    const [totalUsers, setTotalUsers] = useState(0)
+    const [totalPages, setTotalPages] = useState(0)
+
     useEffect(() => {
-        getUsers()
+        getUsers(1)
     }, [])
 
 
-    const getUsers = async () => {
-        let res = await fetchAllUser()
-        //console.log("...", res)
+    const getUsers = async (page) => {
+        let res = await fetchAllUser(page)
         if(res && res.data){
             setListUser(res.data)
+            setTotalUsers(res.total)
+            setTotalPages(res.total_pages)
         }
     }
-    console.log(listUser)
-
+    
+    const handlePageClick  = (e) => {
+      getUsers(+e.selected + 1)
+    }
   return (
     <>
     <Container>
@@ -50,6 +56,26 @@ const TableUser = () => {
         }
       </tbody>
     </Table>
+    <ReactPaginate
+        previousLabel="Previous"
+        nextLabel="Next"
+        pageClassName="page-item"
+        pageLinkClassName="page-link"
+        previousClassName="page-item"
+        previousLinkClassName="page-link"
+        nextClassName="page-item"
+        nextLinkClassName="page-link"
+        breakLabel="..."
+        breakClassName="page-item"
+        breakLinkClassName="page-link"
+        pageCount={totalPages}
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={5}
+        onPageChange={handlePageClick}
+        containerClassName="pagination"
+        activeClassName="active"
+        forcePage={0}
+      />
     </Container>
     </>
   )
