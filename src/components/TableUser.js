@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Table, Container, Image} from 'react-bootstrap'
 import { fetchAllUser } from '../service/userService'
+import ModalAddUser from './ModalAddUser'
 import ReactPaginate from 'react-paginate'
 
 const TableUser = () => {
@@ -8,6 +9,16 @@ const TableUser = () => {
     const [listUser, setListUser] = useState([])
     const [totalUsers, setTotalUsers] = useState(0)
     const [totalPages, setTotalPages] = useState(0)
+    const [showAdd, setShowAdd] = useState(false)
+
+    const handleShowAdd = () => {
+      setShowAdd(true)
+    }
+    
+   const handleCloseAdd = () => {
+      setShowAdd(false)
+    }
+   
 
     useEffect(() => {
         getUsers(1)
@@ -22,12 +33,22 @@ const TableUser = () => {
             setTotalPages(res.total_pages)
         }
     }
+
+    const handleUpdateUser = (user) => {
+      setListUser([user,...listUser])
+    }
     
     const handlePageClick  = (e) => {
       getUsers(+e.selected + 1)
     }
   return (
     <>
+    <Container>
+        <div className='my-3 btn-add'>
+          <span><strong>List users:</strong></span>
+          <button className='btn btn-success' onClick={handleShowAdd}>Add new user</button>
+        </div>
+        </Container>
     <Container>
         <Table striped bordered hover>
       <thead>
@@ -77,6 +98,7 @@ const TableUser = () => {
         forcePage={0}
       />
     </Container>
+    <ModalAddUser  show={showAdd} onShow={handleShowAdd} onHide={handleCloseAdd} onUpdate={handleUpdateUser}/>
     </>
   )
 }

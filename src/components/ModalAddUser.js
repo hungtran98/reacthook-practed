@@ -1,14 +1,27 @@
 import React, { useState } from 'react'
-import {Modal, Button} from 'react-bootstrap';
+import {Modal, Button} from 'react-bootstrap'
+import { postCreateUser } from '../service/userService'
+import { toast } from 'react-toastify'
 
-const ModalAddUser = ({show, onHide}) => {
+const ModalAddUser = ({show, onHide, onUpdate}) => {
     
     const [name, setName] = useState("")
     const [job, setJob] = useState("")
-
-
-    const handleSave = () => {
-      console.log('...save ',name,'job: ',job)
+    const notify = () => toast.success("A User is created success!")
+    
+    const handleSave = async () => {
+      let res = await postCreateUser(name, job)
+      console.log('...', res)
+      if(res && res.id){
+        setName("")
+        setJob("")
+        onHide()
+        onUpdate({id: res.id, first_name: res.name})
+        notify()
+      }
+      else {
+        toast.error("An error...")
+      }
     }
 
     
@@ -21,7 +34,6 @@ const ModalAddUser = ({show, onHide}) => {
         <Modal.Header closeButton>
           <Modal.Title>Add New User</Modal.Title>
         </Modal.Header>
-
         <Modal.Body>
           <div className='body-add-new'>
           <form>
@@ -37,7 +49,6 @@ const ModalAddUser = ({show, onHide}) => {
                 </form>
           </div>
         </Modal.Body>
-
         <Modal.Footer>
           <Button variant="secondary" onClick={onHide}>Close</Button>
           <Button variant="primary" onClick={handleSave}>Save changes</Button>
