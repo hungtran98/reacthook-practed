@@ -3,6 +3,7 @@ import { Table, Container, Image} from 'react-bootstrap'
 import { fetchAllUser } from '../service/userService'
 import ModalAddUser from './ModalAddUser'
 import ReactPaginate from 'react-paginate'
+import ModalUpdateUser from './ModalUpdateUser'
 
 const TableUser = () => {
 
@@ -10,13 +11,28 @@ const TableUser = () => {
     const [totalUsers, setTotalUsers] = useState(0)
     const [totalPages, setTotalPages] = useState(0)
     const [showAdd, setShowAdd] = useState(false)
+    const [showUpdate, setShowUpdate] = useState(false)
+    const [dataUserEdit, setDataUserEdit] = useState({})
+
+
 
     const handleShowAdd = () => {
       setShowAdd(true)
     }
-    
+  
    const handleCloseAdd = () => {
       setShowAdd(false)
+    }
+
+   const handleShowUpdate = (user) => {
+    setShowUpdate(true)
+    setDataUserEdit(user)
+    console.log('...', user)
+  
+    }
+
+    const handleCloseUpdate = () => {
+    setShowUpdate(false)
     }
    
 
@@ -34,10 +50,15 @@ const TableUser = () => {
         }
     }
 
-    const handleUpdateUser = (user) => {
+    const handleAddUser = (user) => {
       setListUser([user,...listUser])
     }
-    
+
+    const handleUpdateUser = (user) => {
+      setListUser(...listUser, {user})
+   
+    }
+    console.log('list user: ',listUser)
     const handlePageClick  = (e) => {
       getUsers(+e.selected + 1)
     }
@@ -58,6 +79,7 @@ const TableUser = () => {
           <th>Email</th>
           <th>First Name</th>
           <th>Last Name</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -71,6 +93,10 @@ const TableUser = () => {
                     <td>{user.email}</td>
                     <td>{user.first_name}</td>
                     <td>{user.last_name}</td>
+                    <td >
+                      <button className='btn btn-warning mx-3' onClick={()=>handleShowUpdate(user)}>Update</button>
+                      <button className='btn btn-danger'>Delete</button>
+                    </td>
                     </tr>
                 )
             )
@@ -98,7 +124,8 @@ const TableUser = () => {
         forcePage={0}
       />
     </Container>
-    <ModalAddUser  show={showAdd} onShow={handleShowAdd} onHide={handleCloseAdd} onUpdate={handleUpdateUser}/>
+    <ModalAddUser  show={showAdd} onShow={handleShowAdd} onHide={handleCloseAdd} onUpdate={handleAddUser}/>
+    <ModalUpdateUser show={showUpdate} onShow={handleShowUpdate} onHide={handleCloseUpdate} dataUserEdit={dataUserEdit}/>
     </>
   )
 }
