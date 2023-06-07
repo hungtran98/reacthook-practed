@@ -30,7 +30,7 @@ const ModalAddUser = ({show, onHide, onUpdate}) => {
       className="modal show"
       style={{ display: 'block', position: 'initial' }}
     >
-      <Modal show={show} onHide={onHide}>
+      <Modal show={show} onHide={onHide} backdrop="static" keyboard={false}>
         <Modal.Header closeButton>
           <Modal.Title>Add New User</Modal.Title>
         </Modal.Header>

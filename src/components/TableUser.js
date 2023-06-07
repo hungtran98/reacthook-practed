@@ -4,6 +4,7 @@ import { fetchAllUser } from '../service/userService'
 import ModalAddUser from './ModalAddUser'
 import ReactPaginate from 'react-paginate'
 import ModalUpdateUser from './ModalUpdateUser'
+import ModalDeleteUser from './ModalDeleteUser'
 
 const TableUser = () => {
 
@@ -12,7 +13,9 @@ const TableUser = () => {
     const [totalPages, setTotalPages] = useState(0)
     const [showAdd, setShowAdd] = useState(false)
     const [showUpdate, setShowUpdate] = useState(false)
+    const [showDelete, setShowDelete] = useState(false)
     const [dataUserEdit, setDataUserEdit] = useState({})
+    const [dataUserDelete, setDataUserDelete] = useState({})
 
 
 
@@ -24,6 +27,7 @@ const TableUser = () => {
       setShowAdd(false)
     }
 
+
    const handleShowUpdate = (user) => {
     setShowUpdate(true)
     setDataUserEdit(user)
@@ -33,6 +37,15 @@ const TableUser = () => {
 
     const handleCloseUpdate = () => {
     setShowUpdate(false)
+    }
+
+    const handleShowDelete = (user) => {
+      setShowDelete(true)
+      setDataUserDelete(user)
+    }
+
+    const handleCloseDelete = () => {
+      setShowDelete(false)
     }
    
 
@@ -55,13 +68,24 @@ const TableUser = () => {
     }
 
     const handleUpdateUser = (user) => {
-      setListUser(...listUser, {user})
-   
+      let cloneListUser = [...listUser]
+      const index = listUser.findIndex(item => item.id === user.id)
+      cloneListUser[index].first_name = user.first_name
+      console.log('comepdksds', cloneListUser)
+      setListUser(cloneListUser)
+     
     }
-    console.log('list user: ',listUser)
+
+    const handleDeleteUser = (id) => {
+      const data = listUser.filter(item => item.id != id)
+      setListUser([...data])
+    }
+    
+    //console.log('list user: ',listUser)
     const handlePageClick  = (e) => {
       getUsers(+e.selected + 1)
     }
+
   return (
     <>
     <Container>
@@ -95,7 +119,7 @@ const TableUser = () => {
                     <td>{user.last_name}</td>
                     <td >
                       <button className='btn btn-warning mx-3' onClick={()=>handleShowUpdate(user)}>Update</button>
-                      <button className='btn btn-danger'>Delete</button>
+                      <button className='btn btn-danger' onClick={() => handleShowDelete(user)}>Delete</button>
                     </td>
                     </tr>
                 )
@@ -125,7 +149,8 @@ const TableUser = () => {
       />
     </Container>
     <ModalAddUser  show={showAdd} onShow={handleShowAdd} onHide={handleCloseAdd} onUpdate={handleAddUser}/>
-    <ModalUpdateUser show={showUpdate} onShow={handleShowUpdate} onHide={handleCloseUpdate} dataUserEdit={dataUserEdit}/>
+    <ModalUpdateUser show={showUpdate} onShow={handleShowUpdate} onHide={handleCloseUpdate} onUpdate={handleUpdateUser} dataUserEdit={dataUserEdit}/>
+    <ModalDeleteUser show={showDelete} onShow={handleShowDelete} onHide={handleCloseDelete} dataUserDelete={dataUserDelete} onDelete={handleDeleteUser}/>
     </>
   )
 }
