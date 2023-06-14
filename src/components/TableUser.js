@@ -5,6 +5,8 @@ import ModalAddUser from './ModalAddUser'
 import ReactPaginate from 'react-paginate'
 import ModalUpdateUser from './ModalUpdateUser'
 import ModalDeleteUser from './ModalDeleteUser'
+import './tableuser.scss'
+import _ from 'lodash';
 
 const TableUser = () => {
 
@@ -16,8 +18,18 @@ const TableUser = () => {
     const [showDelete, setShowDelete] = useState(false)
     const [dataUserEdit, setDataUserEdit] = useState({})
     const [dataUserDelete, setDataUserDelete] = useState({})
+    const [sortBy, setSortBy] = useState('asc')
+    const [fieldSort, setFieldSort] = useState('id')
 
 
+
+    const handleSort = (sortBy, fieldSort) => {
+      setSortBy(sortBy)
+      setFieldSort(fieldSort)
+      let listUserClone = _.cloneDeep(listUser)
+      listUserClone = _.orderBy(listUserClone, [fieldSort], [sortBy])
+      setListUser(listUserClone)
+    }
 
     const handleShowAdd = () => {
       setShowAdd(true)
@@ -31,7 +43,7 @@ const TableUser = () => {
    const handleShowUpdate = (user) => {
     setShowUpdate(true)
     setDataUserEdit(user)
-    console.log('...', user)
+    //console.log('...', user)
   
     }
 
@@ -71,7 +83,7 @@ const TableUser = () => {
       let cloneListUser = [...listUser]
       const index = listUser.findIndex(item => item.id === user.id)
       cloneListUser[index].first_name = user.first_name
-      console.log('comepdksds', cloneListUser)
+      //console.log('comepdksds', cloneListUser)
       setListUser(cloneListUser)
      
     }
@@ -81,7 +93,7 @@ const TableUser = () => {
       setListUser([...data])
     }
     
-    //console.log('list user: ',listUser)
+    console.log('list user: ',listUser)
     const handlePageClick  = (e) => {
       getUsers(+e.selected + 1)
     }
@@ -98,10 +110,26 @@ const TableUser = () => {
         <Table striped bordered hover>
       <thead>
         <tr>
-          <th>ID</th>
+          <th>
+          <div className='sort-header'>
+            <span>ID</span>
+            <span>
+            <i className="fa-solid fa-arrow-down-long" onClick={() => handleSort('desc','id')}></i>
+            <i className="fa-solid fa-arrow-up-long" onClick={() => handleSort('asc','id')}></i>
+            </span>
+          </div>
+          </th>
           <th>Avatar</th>
           <th>Email</th>
-          <th>First Name</th>
+          <th>
+            <div className='sort-header'>
+            <span>First Name</span>
+            <span>
+              <i className="fa-solid fa-arrow-down-long" onClick={() => handleSort('desc','first_name')}></i>
+              <i className="fa-solid fa-arrow-up-long" onClick={() => handleSort('asc','first_name')}></i>
+            </span>
+            </div>
+          </th>
           <th>Last Name</th>
           <th>Actions</th>
         </tr>

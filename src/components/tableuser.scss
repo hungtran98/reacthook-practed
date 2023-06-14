@@ -1,0 +1,17 @@
+.sort-header {
+    display: flex;
+    justify-content: space-between;
+
+    i {
+        padding: 0 2px;
+        cursor: pointer;
+
+
+        .fa-solid{
+            .fa-arrow-down-long{
+            color: #978d1c;
+
+            }
+        }
+    }
+}
