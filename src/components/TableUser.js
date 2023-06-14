@@ -20,6 +20,7 @@ const TableUser = () => {
     const [dataUserDelete, setDataUserDelete] = useState({})
     const [sortBy, setSortBy] = useState('asc')
     const [fieldSort, setFieldSort] = useState('id')
+    const [keyword, setKeyword] = useState("")
 
 
 
@@ -98,6 +99,19 @@ const TableUser = () => {
       getUsers(+e.selected + 1)
     }
 
+    const handleSearch = _.debounce( (e) => {
+      let term = e.target.value
+      setKeyword(term)
+      if(term){
+        let listUserClone = _.cloneDeep(listUser)
+        listUserClone = listUserClone.filter(item => item.email.includes(term))
+        setListUser(listUserClone)
+      }
+      else {
+        getUsers(1)
+      }
+    }, 500 )
+
   return (
     <>
     <Container>
@@ -105,7 +119,12 @@ const TableUser = () => {
           <span><strong>List users:</strong></span>
           <button className='btn btn-success' onClick={handleShowAdd}>Add new user</button>
         </div>
-        </Container>
+    </Container> 
+    <Container>
+      <div className='col-4 my-3'>
+        <input className='form-control' placeholder='search user by email...'  onChange={(e) => handleSearch(e)}/>
+      </div>
+    </Container>
     <Container>
         <Table striped bordered hover>
       <thead>
