@@ -7,6 +7,7 @@ import ModalUpdateUser from './ModalUpdateUser'
 import ModalDeleteUser from './ModalDeleteUser'
 import './tableuser.scss'
 import _ from 'lodash';
+import { CSVLink, CSVDownload } from "react-csv"
 
 const TableUser = () => {
 
@@ -21,6 +22,11 @@ const TableUser = () => {
     const [sortBy, setSortBy] = useState('asc')
     const [fieldSort, setFieldSort] = useState('id')
     const [keyword, setKeyword] = useState("")
+
+    const [csvData, setCsvData] = useState([])
+
+    console.log('first', csvData)
+
 
 
 
@@ -71,6 +77,7 @@ const TableUser = () => {
         let res = await fetchAllUser(page)
         if(res && res.data){
             setListUser(res.data)
+            setCsvData(res.data)
             setTotalUsers(res.total)
             setTotalPages(res.total_pages)
         }
@@ -117,7 +124,17 @@ const TableUser = () => {
     <Container>
         <div className='my-3 btn-add'>
           <span><strong>List users:</strong></span>
-          <button className='btn btn-success' onClick={handleShowAdd}>Add new user</button>
+          <div>
+            
+            <CSVLink className="btn btn-primary mx-3" filename={"users-file.csv"} data={csvData}>
+              <i className="fa-solid fa-file-arrow-down mx-2"></i>Download me
+            </CSVLink>
+{/* 
+            <CSVDownload data={csvData} target="_blank" /> */}
+          <button className='btn btn-success' onClick={handleShowAdd}>
+           <i className='fa-solid fa-circle-plus'></i> Add new
+          </button>
+          </div>
         </div>
     </Container> 
     <Container>
