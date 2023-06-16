@@ -8,7 +8,8 @@ import ModalDeleteUser from './ModalDeleteUser'
 import './tableuser.scss'
 import _ from 'lodash';
 import { CSVLink, CSVDownload } from "react-csv"
-
+import Papa from 'papaparse'
+import { toast } from 'react-toastify'
 const TableUser = () => {
 
     const [listUser, setListUser] = useState([])
@@ -77,7 +78,6 @@ const TableUser = () => {
         let res = await fetchAllUser(page)
         if(res && res.data){
             setListUser(res.data)
-            setCsvData(res.data)
             setTotalUsers(res.total)
             setTotalPages(res.total_pages)
         }
@@ -119,18 +119,85 @@ const TableUser = () => {
       }
     }, 500 )
 
+    const getUsersExport = (event, done) => {
+      let result = []
+      if(listUser && listUser.length > 0){
+        result.push(['Id', 'Avatar', 'Email', 'First name', 'Last name'])
+        listUser.map((item, index) => {
+          let arr = []
+          arr[0] = item.id
+          arr[1] = item.avatar
+          arr[2] = item.email
+          arr[3] = item.first_name
+          arr[4] = item.last_name
+          result.push(arr)
+        })
+        setCsvData(result)
+        done()
+      }
+    }
+
+    const handleChangeImport = (event) => {
+      if(event.target.files && event.target.files[0]){
+        let file = event.target.files[0]
+        if(file.type !== 'text/csv'){
+          toast.error('Only accept Csv file !')
+          return
+        }
+
+        Papa.parse(file, {
+          header: false,
+          complete: function(responses) {
+            if(responses.data && responses.data.length > 0){
+              let rawData = responses.data
+             
+              if(rawData.length > 0) {
+                if(rawData[0] && rawData[0].length === 4) {
+                  if(rawData[0][0] !== 'avatar' || rawData[0][1] !== 'email'
+                  || rawData[0][2] !== 'first_name' || rawData[0][3] !== 'last_name'
+                  ){
+                    toast.error('wong format at header Csv file !')
+                  }
+                  else {
+                    let updates = []
+                    rawData.map((item, index) => {
+                      if(index > 0 && item.length === 4) {
+                        let obj = {
+                          avatar: item[0],
+                          email: item[1],
+                          first_name: item[2],
+                          last_name: item[3],
+                        }
+                        updates.push(obj)
+                      }
+                    })
+                   // console.log('updates', updates)
+                   setListUser([...updates, ...listUser])
+                  }
+
+                }
+              }
+            
+          }
+        } 
+      })
+      }
+     
+    }
+
   return (
     <>
     <Container>
         <div className='my-3 btn-add'>
           <span><strong>List users:</strong></span>
           <div>
-            
-            <CSVLink className="btn btn-primary mx-3" filename={"users-file.csv"} data={csvData}>
-              <i className="fa-solid fa-file-arrow-down mx-2"></i>Download me
+            <input id ='import' type='file' hidden onChange={handleChangeImport}/>
+             <label className='btn btn-warning' htmlFor='import'>
+             <i className="fa-solid fa-file-import"></i> Import
+            </label>
+            <CSVLink className="btn btn-primary mx-3" filename={"users-file.csv"} data={csvData} asyncOnClick={true} onClick={getUsersExport}>
+              <i className="fa-solid fa-file-export"></i> Export
             </CSVLink>
-{/* 
-            <CSVDownload data={csvData} target="_blank" /> */}
           <button className='btn btn-success' onClick={handleShowAdd}>
            <i className='fa-solid fa-circle-plus'></i> Add new
           </button>
@@ -177,7 +244,7 @@ const TableUser = () => {
                 (user, index) => (
                     <tr key={`user-${index}`}>
                     <td>{user.id}</td>
-                    <td><Image src={user.avatar} roundedCircle/></td>
+                    <td><Image style={{width: '70px', height: '70px', backgroundSize: 'cover' }} src={user.avatar}/></td>
                     <td>{user.email}</td>
                     <td>{user.first_name}</td>
                     <td>{user.last_name}</td>
