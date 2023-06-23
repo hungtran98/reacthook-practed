@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { ToastContainer } from 'react-toastify'
 import { Container } from 'react-bootstrap'
-import Header from '../components/Header'
-import TableUser from '../components/TableUser'
+import Header from '../../components/Header'
+import TableUser from '../../components/TableUser'
 import './user.scss'
 
 const User = () => {

@@ -1,12 +1,15 @@
 
 import './App.scss';
-import User from '../src/pages/User'
+import User from '../src/pages/User/User'
+import Home from '../src/pages/Home/Home'
+import { Routes, Route} from 'react-router-dom'
 
 function App() {
   return (
-    <div>
-      <User />
-    </div>
+   <Routes>
+    <Route path='/' element={<Home />}/>
+    <Route path='/users' element={<User />}/>
+   </Routes>
   );
 }
 
