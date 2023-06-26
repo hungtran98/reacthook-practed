@@ -1,6 +1,7 @@
 import React from 'react'
 import Header from '../../components/Header'
 import {Image,Container} from 'react-bootstrap'
+import { ToastContainer } from 'react-toastify'
 
 
 const Home = () => {
@@ -13,6 +14,18 @@ const Home = () => {
 
             </div>
         </Container>
+        <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+            />
     </div>
   )
 }
