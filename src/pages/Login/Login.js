@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import './login.scss'
 import Header from '../../components/Header'
 import { loginApi } from '../../service/userService'
 import { toast } from 'react-toastify'
 import { ToastContainer } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
+import { UserContext } from '../../context/UserProvider'
+
 
 const Login = () => {
   const navigate = useNavigate()
@@ -13,6 +15,10 @@ const Login = () => {
   const [password, setPassword] = useState("")
   const [isShowPassword, setIsShowPassword] = useState(false)
   const [loadingData, setLoadingData] = useState(false)
+
+  const { login } = useContext(UserContext)
+
+  
 
   useEffect(() => {
     let token = localStorage.getItem('tokenUser')
@@ -31,7 +37,7 @@ const Login = () => {
     let res = await loginApi(email, password)
     //console.log('check response...', res)
     if(res && res.token) {
-      localStorage.setItem('tokenUser', res.token)
+      login(email, res.token)
       navigate('/')
     }
     else {
@@ -63,7 +69,7 @@ const Login = () => {
       <button onClick={() => handleLogin()} disabled={loadingData ? true : false} className={email && password ? 'active' : 'button-login'} >
         {loadingData ? <i className="fa-sharp fa-solid fa-spinner fa-spin-pulse" ></i> : "Log in"}
       </button>
-      <div className='button-back'><i className="fa-solid fa-chevron-left"></i>Go back</div>
+      <div className='button-back' onClick={()=> navigate('/')}><i className="fa-solid fa-chevron-left"></i>&nbsp; Go back</div>
     </div>
     <ToastContainer
             position="top-right"
