@@ -11,8 +11,7 @@ const User = () => {
     <>
     <div className='user'>
         <Header />
-        <TableUser />
-        
+        <TableUser />   
     </div>
     <ToastContainer
             position="top-right"
