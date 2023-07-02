@@ -1,16 +1,16 @@
 import React from 'react'
 import Header from '../../components/Header'
-import {Image,Container} from 'react-bootstrap'
+import { Container } from 'react-bootstrap'
 import { ToastContainer } from 'react-toastify'
 
 
 const Home = () => {
-    const bgURL = 'https://i.pinimg.com/564x/db/c6/69/dbc669ff3396df6ab833ba15d94a6000.jpg'
+    const bgURL = 'https://images.pexels.com/photos/1447495/pexels-photo-1447495.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
   return (
     <div>
         <Header />
         <Container>
-            <div style={{backgroundImage: `url(${bgURL})`, width: '500px', height: '700px', backgroundSize: 'cover' }}>
+            <div style={{backgroundImage: `url(${bgURL})`, width: '100%', height: '700px', backgroundSize: 'cover' ,opacity: 0.9}}>
 
             </div>
         </Container>
