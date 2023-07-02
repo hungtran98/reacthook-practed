@@ -1,8 +1,20 @@
 .user {
 
     .btn-add {
-        display: flex;
+        //display: flex;
         align-items: center;
         justify-content: space-between;
     }
+
+    .customize-table {
+        overflow-x: auto;
+    }
+
+    .pagination {
+        justify-content: center;
+    }
+
+    // .btns-action {
+    //     display: flex;
+    // }
 }

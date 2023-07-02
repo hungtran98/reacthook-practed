@@ -188,7 +188,7 @@ const TableUser = () => {
   return (
     <>
     <Container>
-        <div className='my-3 btn-add'>
+        <div className='my-3 btn-add d-sm-flex'>
           <span><strong>List users:</strong></span>
           <div>
             <input id ='import' type='file' hidden onChange={handleChangeImport}/>
@@ -205,11 +205,12 @@ const TableUser = () => {
         </div>
     </Container> 
     <Container>
-      <div className='col-4 my-3'>
+      <div className='col-12 col-sm-4 my-3'>
         <input className='form-control' placeholder='search user by email...'  onChange={(e) => handleSearch(e)}/>
       </div>
     </Container>
     <Container>
+      <div className='customize-table'>
         <Table striped bordered hover>
       <thead>
         <tr>
@@ -248,9 +249,9 @@ const TableUser = () => {
                     <td>{user.email}</td>
                     <td>{user.first_name}</td>
                     <td>{user.last_name}</td>
-                    <td >
-                      <button className='btn btn-warning mx-3' onClick={()=>handleShowUpdate(user)}>Update</button>
-                      <button className='btn btn-danger' onClick={() => handleShowDelete(user)}>Delete</button>
+                    <td>
+                      <button className='btn btn-warning mx-sm-2 my-1' onClick={()=>handleShowUpdate(user)}>Update</button>
+                      <button className='btn btn-danger mx-sm-2 my-1' onClick={() => handleShowDelete(user)}>Delete</button>
                     </td>
                     </tr>
                 )
@@ -258,6 +259,7 @@ const TableUser = () => {
         }
       </tbody>
     </Table>
+    </div>
     <ReactPaginate
         previousLabel="Previous"
         nextLabel="Next"

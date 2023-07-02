@@ -4,7 +4,7 @@ import Login from '../pages/Login/Login'
 import User from '../pages/User/User'
 import React from 'react'
 import PrivateRoute from './PrivateRoute'
-
+import NotFound from './NotFound'
 const AppRoute = () => {
   return (
     <>
@@ -16,6 +16,7 @@ const AppRoute = () => {
                 <User />
             </PrivateRoute>
         }/>
+        <Route path='*' element={<NotFound />}/>
     </Routes>
     </>
   )

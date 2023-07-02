@@ -34,7 +34,7 @@ const Login = () => {
       return
     }
     setLoadingData(true)
-    let res = await loginApi(email, password)
+    let res = await loginApi(email.trim(), password)
     //console.log('check response...', res)
     if(res && res.token) {
       login(email, res.token)
@@ -51,6 +51,11 @@ const Login = () => {
 
   }
 
+  const handlePressEnter = (e) => {
+    if(e && e.key === 'Enter')
+    handleLogin()
+  }
+
   
 
   return (
@@ -63,7 +68,7 @@ const Login = () => {
         <input className='input' placeholder='Email or username' value={email} onChange={(e) => setEmail(e.target.value) }/>
       </div>
       <div className='inputs'>
-        <input className='input' type={isShowPassword ? 'text' : 'password'} placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value) }/>
+        <input className='input' type={isShowPassword ? 'text' : 'password'} placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value) } onKeyDown={e => handlePressEnter(e)}/>
         <div className='eye'><i onClick={() => setIsShowPassword(!isShowPassword)} className={isShowPassword ? "fa-solid fa-eye" : "fa-solid fa-eye-slash" }></i></div>
       </div>
       <button onClick={() => handleLogin()} disabled={loadingData ? true : false} className={email && password ? 'active' : 'button-login'} >
