@@ -2,14 +2,13 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Nav, Navbar, Container, NavDropdown} from 'react-bootstrap'
 import {  useLocation, NavLink, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { UserContext } from '../context/UserProvider'
-
-
+import { useSelector, useDispatch } from 'react-redux'
+import { handleLogoutRedux } from  '../redux/actions/userActions'
 
 
 const Header = () => {
-
-  const { logout, user } = useContext(UserContext)
+  const user = useSelector(state => state.user.account)
+  const dispatch = useDispatch()
   const location = useLocation(
   )
   const [hideHeader, setHideHeader]  = useState(false)
@@ -21,7 +20,8 @@ const Header = () => {
   }, [])
 
   const handleLogout = () => {
-    logout()
+    //logout()
+    dispatch(handleLogoutRedux())
     navigate('/')
     toast.success('Log out success !')
   }

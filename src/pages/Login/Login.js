@@ -6,26 +6,23 @@ import { toast } from 'react-toastify'
 import { ToastContainer } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { UserContext } from '../../context/UserProvider'
-
+import { handleLoginRedux } from '../../redux/actions/userActions'
+import { useDispatch, useSelector } from 'react-redux'
 
 const Login = () => {
   const navigate = useNavigate()
-  //console.log('navi', navigate)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [isShowPassword, setIsShowPassword] = useState(false)
-  const [loadingData, setLoadingData] = useState(false)
-
-  const { login } = useContext(UserContext)
-
+  const dispatch = useDispatch()
+  const loadingData = useSelector(state => state.user.isLoading)
+  const account = useSelector(state => state.user.account)
   
-
   useEffect(() => {
-    let token = localStorage.getItem('tokenUser')
-    if(token) {
+    if(account && account.auth === true){
       navigate('/')
     }
-  },[])
+  },[account])
 
   const handleLogin = async () => {
     
@@ -33,22 +30,9 @@ const Login = () => {
       toast.error('Email/password is required!')
       return
     }
-    setLoadingData(true)
-    let res = await loginApi(email.trim(), password)
-    //console.log('check response...', res)
-    if(res && res.token) {
-      login(email, res.token)
-      navigate('/')
-    }
-    else {
-      //error
-      if(res && res.status === 400) {
-        toast.error(res.data.error)
-      }
-      
-    }
-    setLoadingData(false)
 
+    dispatch(handleLoginRedux(email,password))
+  
   }
 
   const handlePressEnter = (e) => {
@@ -63,7 +47,7 @@ const Login = () => {
       <Header />
       <div className='login-container col-12 col-sm-4'>
       <h2>Log in</h2>
-      <div className='text'>Email or username</div>
+      <div className='text'>Email or username: eve.holt@reqres.in</div>
       <div className='inputs'>
         <input className='input' placeholder='Email or username' value={email} onChange={(e) => setEmail(e.target.value) }/>
       </div>

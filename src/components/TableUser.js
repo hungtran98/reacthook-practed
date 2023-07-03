@@ -26,10 +26,7 @@ const TableUser = () => {
 
     const [csvData, setCsvData] = useState([])
 
-    console.log('first', csvData)
-
-
-
+    //console.log('first', csvData)
 
     const handleSort = (sortBy, fieldSort) => {
       setSortBy(sortBy)
@@ -51,8 +48,6 @@ const TableUser = () => {
    const handleShowUpdate = (user) => {
     setShowUpdate(true)
     setDataUserEdit(user)
-    //console.log('...', user)
-  
     }
 
     const handleCloseUpdate = () => {
@@ -91,7 +86,6 @@ const TableUser = () => {
       let cloneListUser = [...listUser]
       const index = listUser.findIndex(item => item.id === user.id)
       cloneListUser[index].first_name = user.first_name
-      //console.log('comepdksds', cloneListUser)
       setListUser(cloneListUser)
      
     }
@@ -111,7 +105,7 @@ const TableUser = () => {
       setKeyword(term)
       if(term){
         let listUserClone = _.cloneDeep(listUser)
-        listUserClone = listUserClone.filter(item => item.email.includes(term))
+        listUserClone = listUserClone.filter(item => item.email.includes(term.toLowerCase()))
         setListUser(listUserClone)
       }
       else {
